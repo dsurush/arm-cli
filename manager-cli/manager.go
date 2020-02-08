@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/dsurush/arm-cli/manager-cli/controllers"
 	"github.com/dsurush/arm-core/dbinit"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
@@ -22,5 +23,5 @@ func main() {
 	if err != nil {
 		log.Fatal("All go with vagine")
 	}
-
+	controllers.AddClientHandler(db)
 }
