@@ -6,5 +6,9 @@ github.com/dsurush/arm-core v0.0.0-20200208130429-9087dfc9aa08 h1:UPEmr3NYzNWBGQ
 github.com/dsurush/arm-core v0.0.0-20200208130429-9087dfc9aa08/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
 github.com/dsurush/arm-core v0.0.0-20200208131844-d2b1d255a225 h1:8MlYSCSj1mwyBnkpImj5CA3EUzmyIt4HqtW0UPFn8FQ=
 github.com/dsurush/arm-core v0.0.0-20200208131844-d2b1d255a225/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
+github.com/dsurush/arm-core v0.0.0-20200209045409-15a57392be47 h1:WKBGGsPWT+fTMr7bvJTwYb7tsRqXAuxLJGVed41ukrE=
+github.com/dsurush/arm-core v0.0.0-20200209045409-15a57392be47/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
+github.com/dsurush/arm-core v0.0.0-20200209053631-01662d3703fe h1:ZWf+l05LJgDwQeePw/WH9UzOKhgEcNFeyuWc30I3wmQ=
+github.com/dsurush/arm-core v0.0.0-20200209053631-01662d3703fe/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible h1:gXHsfypPkaMZrKbD5209QV9jbUTJKjyR5WD3HYQSd+U=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=

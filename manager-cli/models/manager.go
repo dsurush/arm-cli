@@ -8,3 +8,10 @@ type Client struct{
 	Password string
 	locked bool
 }
+
+type CreateNewClient struct {
+	Name string
+	Surname string
+	Login string
+	Password string
+}

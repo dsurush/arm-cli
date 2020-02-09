@@ -16,12 +16,13 @@ func main() {
 	defer db.Close()
 	err = db.Ping()
 	if err != nil {
-		fmt.Println("ALO")
+		fmt.Println("Нет подключения к серверу")
 	}
-	fmt.Println("Hello")
+
 	err = dbinit.Init(db)
 	if err != nil {
 		log.Fatal("All go with vagine")
 	}
-	controllers.AddClientHandler(db)
+	//controllers.AddClientHandler(db)
+	controllers.AddATM(db)
 }
