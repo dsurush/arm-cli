@@ -54,7 +54,7 @@ func AddClientHandler(db *sql.DB) (err error){
 	return nil
 }
 
-func AddATM(db *sql.DB) (err error){
+func AddATMHandler(db *sql.DB) (err error){
 
 	var newATM models.CreateNewATM
 
@@ -87,7 +87,7 @@ func AddATM(db *sql.DB) (err error){
 	return nil
 }
 
-func AddAccountByClientID(db *sql.DB) (err error){
+func AddAccountHandler(db *sql.DB) (err error){
 	fmt.Println("Введите ID пользователя: ")
 	var clientID int64
 	_, err = fmt.Scan(&clientID)
@@ -114,6 +114,32 @@ func AddAccountByClientID(db *sql.DB) (err error){
 	err = dbupdate.AddAccount(clientID, paymentSystem, locked, db)
 	if err != nil {
 		fmt.Errorf("Ошибка при добавлении, %e", err)
+	}
+	return nil
+}
+
+func AddServiceHandler(db *sql.DB) (err error) {
+	fmt.Println("Введите название услуги:")
+	var serviceName string
+	reader := bufio.NewReader(os.Stdin)
+	serviceName, err = reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("Can't read command: %v", err)
+		return err
+	}
+
+	fmt.Println("Введите цену услуги: ")
+	var price int64
+	_, err = fmt.Scan(&price)
+	if err != nil {
+		fmt.Errorf("Wrongerr %e", err)
+		return err
+	}
+
+	err = dbupdate.AddService(serviceName, price, db)
+	if err != nil {
+		fmt.Errorf("errorr %e", err)
+		return err
 	}
 	return nil
 }

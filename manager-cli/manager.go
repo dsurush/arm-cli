@@ -23,10 +23,10 @@ func main() {
 	if err != nil {
 		log.Fatal("All go with vagine")
 	}
-	controllers.AddAccountByClientID(db)
-	//dbupdate.AddAccount(1, "Mir", true, db)
+	//controllers.AddAccountHandler(db)
 	//controllers.AddClientHandler(db)
-	//controllers.AddATM(db)
+	//controllers.AddATMHandler(db)
+	controllers.AddServiceHandler(db)
 }
 
 func mainAppFunction() {
