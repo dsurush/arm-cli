@@ -23,6 +23,15 @@ func main() {
 	if err != nil {
 		log.Fatal("All go with vagine")
 	}
+	controllers.AddAccountByClientID(db)
+	//dbupdate.AddAccount(1, "Mir", true, db)
 	//controllers.AddClientHandler(db)
-	controllers.AddATM(db)
+	//controllers.AddATM(db)
+}
+
+func mainAppFunction() {
+	var cmd string
+	for {
+		fmt.Scan(&cmd)
+	}
 }

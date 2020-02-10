@@ -7,6 +7,7 @@ type Client struct{
 	Login string
 	Password string
 	locked bool
+	NumberPhone string
 }
 
 type CreateNewClient struct {
@@ -14,4 +15,5 @@ type CreateNewClient struct {
 	Surname string
 	Login string
 	Password string
+	NumberPhone string
 }

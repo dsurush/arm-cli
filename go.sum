@@ -10,5 +10,11 @@ github.com/dsurush/arm-core v0.0.0-20200209045409-15a57392be47 h1:WKBGGsPWT+fTMr
 github.com/dsurush/arm-core v0.0.0-20200209045409-15a57392be47/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
 github.com/dsurush/arm-core v0.0.0-20200209053631-01662d3703fe h1:ZWf+l05LJgDwQeePw/WH9UzOKhgEcNFeyuWc30I3wmQ=
 github.com/dsurush/arm-core v0.0.0-20200209053631-01662d3703fe/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
+github.com/dsurush/arm-core v0.0.0-20200209082139-46c8ab285602 h1:4LTjCyIZDbmmC/QQQN1ICuegnEtOu51GxxfqBA6z0D0=
+github.com/dsurush/arm-core v0.0.0-20200209082139-46c8ab285602/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
+github.com/dsurush/arm-core v0.0.0-20200209083009-172c2a8d7ec2 h1:Kh2PWw7AX9DTFVvQQUChWq+v+1/D4vDTaykMlg+8lGc=
+github.com/dsurush/arm-core v0.0.0-20200209083009-172c2a8d7ec2/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
+github.com/dsurush/arm-core v0.0.0-20200209093557-5ddd65cb73c2 h1:amY/okVG50W3ga5PnR6ryroLsfwfVRNUy54k8iyjQgg=
+github.com/dsurush/arm-core v0.0.0-20200209093557-5ddd65cb73c2/go.mod h1:7EPkdBFIvKw+5w8YCL8ZUvJ5AjcPiaKLN/FVNppWM04=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible h1:gXHsfypPkaMZrKbD5209QV9jbUTJKjyR5WD3HYQSd+U=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=

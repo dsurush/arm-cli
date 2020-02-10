@@ -37,13 +37,20 @@ func AddClientHandler(db *sql.DB) (err error){
 	if err != nil {
 		return err
 	}
-	err = dbupdate.AddClient(newClient.Name, newClient.Surname, newClient.Login, newClient.Password, db)
+
+	fmt.Println("Enter users phone: ")
+	_, err = fmt.Scan(&newClient.NumberPhone)
+	if err != nil {
+		return err
+	}
+
+	err = dbupdate.AddClient(newClient.Name, newClient.Surname, newClient.Login, newClient.Password, newClient.NumberPhone, db)
 	if err != nil {
 		log.Fatalf("Ne dobavilas")
 	}
 
 	fmt.Println("Users added successfully")
-	fmt.Printf("name: %s, \nsurname: %s, \nlogin: %s,\npassword: %s", newClient.Name, newClient.Surname, newClient.Login, newClient.Password)
+	fmt.Printf("name: %s,\nsurname: %s,\nlogin: %s,\npassword: %s,\nphoneNumber: %s", newClient.Name, newClient.Surname, newClient.Login, newClient.Password, newClient.NumberPhone)
 	return nil
 }
 
@@ -76,5 +83,37 @@ func AddATM(db *sql.DB) (err error){
 		activity = "активный"
 	}
 	fmt.Printf("Был добавлен АТМ по адрессу: %s\nТип активности: %s", newATM.Address, activity)
+	dbupdate.Test()
+	return nil
+}
+
+func AddAccountByClientID(db *sql.DB) (err error){
+	fmt.Println("Введите ID пользователя: ")
+	var clientID int64
+	_, err = fmt.Scan(&clientID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Введите название типа платежной системы: ")
+	var paymentSystem string
+	_, err = fmt.Scan(&paymentSystem)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Введите 1 если хотите разблокировать сейчас же счет, иначе 0:")
+	locked := false
+	var typeOfLock int
+	_, err = fmt.Scan(&typeOfLock)
+	if err != nil {
+		return err
+	}
+	if typeOfLock == 1{
+		locked = true
+	}
+	err = dbupdate.AddAccount(clientID, paymentSystem, locked, db)
+	if err != nil {
+		fmt.Errorf("Ошибка при добавлении, %e", err)
+	}
 	return nil
 }
