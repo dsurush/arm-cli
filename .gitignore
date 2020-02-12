@@ -2,3 +2,5 @@
 *.sqlite
 *.sql
 *.exe
+*.xml
+*.json

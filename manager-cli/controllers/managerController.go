@@ -3,9 +3,12 @@ package controllers
 import (
 	"bufio"
 	"database/sql"
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"github.com/dsurush/arm-cli/manager-cli/models"
 	"github.com/dsurush/arm-core/dbupdate"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -141,5 +144,101 @@ func AddServiceHandler(db *sql.DB) (err error) {
 		fmt.Errorf("errorr %e", err)
 		return err
 	}
+	return nil
+}
+
+func AddClientsToJsonXmlFiles(db *sql.DB) (err error){
+	clients, err := dbupdate.GetAllClients(db)
+	if err != nil {
+		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
+		return err
+	}
+	////Json
+	data, err := json.Marshal(clients)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("clients.json", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////XML
+	data, err = xml.Marshal(clients)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("clients.xml", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////
+	return nil
+}
+
+func AddAccountsToJsonXmlFiles(db *sql.DB) (err error){
+	Accounts, err := dbupdate.GetAllAccounts(db)
+	if err != nil {
+		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
+		return err
+	}
+	////Json
+	data, err := json.Marshal(Accounts)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("account.json", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////XML
+	data, err = xml.Marshal(Accounts)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("account.xml", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////
+	return nil
+}
+
+func AddATMsToJsonXmlFiles(db *sql.DB) (err error){
+	ATMs, err := dbupdate.GetAllATMs(db)
+	if err != nil {
+		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
+		return err
+	}
+	////Json
+	data, err := json.Marshal(ATMs)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("ATM.json", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////XML
+	data, err = xml.Marshal(ATMs)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	err = ioutil.WriteFile("ATM.xml", data, 0666)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	////
 	return nil
 }
