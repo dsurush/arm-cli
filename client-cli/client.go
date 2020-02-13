@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/dsurush/arm-cli/client-cli/controllers"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
@@ -22,15 +23,28 @@ func main() {
 }
 func mainAppFunction(db *sql.DB)  {
 	var cmd string
-	fmt.Println(unauthorizedOperations)
 	for {
+		fmt.Println(unauthorizedOperations)
 		fmt.Scan(&cmd)
 		switch cmd {
 		case "1":
+			err := controllers.Authorize(db)
+			if err != nil {
+				fmt.Println("Попробуйте еще раз")
+				continue
+			} else {
+				//TODO:////
+				fmt.Println("НУЖНО ПИСАТЬ ЧТО ПОСЛЕ АВТОРИЗАЦИЯ")
+				controllers.AuthorizedOperations(db)
+			}
+		case "3":
+			err := controllers.GetATMsForClient(db)
+			if err != nil {
+				fmt.Printf("Ошибка выдачи списка банкоматов %s:", err)
+			}
 		case "q":
 			os.Exit(0)
 		default:
-
 			fmt.Println("Введена неверная команда, попробуйте еще раз", unauthorizedOperations)
 			continue
 		}
