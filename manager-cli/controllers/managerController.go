@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/dsurush/arm-cli/manager-cli/models"
 	"github.com/dsurush/arm-core/dbupdate"
+	"github.com/dsurush/arm-core/dbupdate/cmodels"
 	"io/ioutil"
 	"log"
 	"os"
@@ -148,7 +149,8 @@ func AddServiceHandler(db *sql.DB) (err error) {
 }
 
 func AddClientsToJsonXmlFiles(db *sql.DB) (err error){
-	clients, err := dbupdate.GetAllClients(db)
+	clientsInSlice, err := dbupdate.GetAllClients(db)
+	clients := cmodels.ClientList{clientsInSlice}
 	if err != nil {
 		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
 		return err
@@ -180,7 +182,8 @@ func AddClientsToJsonXmlFiles(db *sql.DB) (err error){
 }
 
 func AddAccountsToJsonXmlFiles(db *sql.DB) (err error){
-	Accounts, err := dbupdate.GetAllAccounts(db)
+	AccountsInSLice, err := dbupdate.GetAllAccounts(db)
+	Accounts := cmodels.AccountList{AccountsInSLice}
 	if err != nil {
 		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
 		return err
@@ -212,7 +215,8 @@ func AddAccountsToJsonXmlFiles(db *sql.DB) (err error){
 }
 
 func AddATMsToJsonXmlFiles(db *sql.DB) (err error){
-	ATMs, err := dbupdate.GetAllATMs(db)
+	ATMsInSlice, err := dbupdate.GetAllATMs(db)
+	ATMs := cmodels.AtmList{ATMsInSlice}
 	if err != nil {
 		fmt.Errorf("Ошибка при получении клиентов с БД %e", err)
 		return err
@@ -239,6 +243,5 @@ func AddATMsToJsonXmlFiles(db *sql.DB) (err error){
 		log.Fatal(err)
 		return err
 	}
-	////
 	return nil
 }
