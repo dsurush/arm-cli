@@ -3,13 +3,19 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
-	"github.com/dsurush/arm-cli/manager-cli/models"
+	"github.com/dsurush/arm-cli/manager-cli/controllers"
 	"github.com/dsurush/arm-core/dbinit"
+	"github.com/dsurush/arm-core/dbupdate/cmodels"
+	"os"
+	"strings"
+
+	//"encoding/xml"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
 	"log"
 )
+
 func main() {
 	db, err := sql.Open("sqlite3", "db.sqlite")
 	if err != nil {
@@ -25,51 +31,58 @@ func main() {
 	if err != nil {
 		log.Fatal("All go with vagine")
 	}
-	//clients, err := dbupdate.GetAllClients(db)
-	//if/ err != nil {
-	//	fmt.Println("wrong ans\n")
-	//}
-	//for _, client := range clients{
-	//	fmt.Println(client)
-	//}
-	//controllers.AddAccountHandler(db)
-	//for i := 1; i <= 5; i++ {controllers.AddClientHandler(db)}
-	//controllers.AddATMHandler(db)
-	//controllers.AddServiceHandler(db)
-	//controllers.AddClientsToJsonXmlFiles(db)
-	//controllers.AddAccountsToJsonXmlFiles(db)
-		test(db)
-	//controllers.AddATMsToJsonXmlFiles(db)
+	mainAppFunction(db)
 }
 
-func mainAppFunction() {
+func mainAppFunction(db *sql.DB) {
 	var cmd string
 	for {
+		fmt.Println(AuthorizedOperations)
 		fmt.Scan(&cmd)
+		switch cmd {
+		case "1":
+			controllers.AddClientHandler(db)
+		case "2":
+			controllers.AddAccountHandler(db)
+		case "3":
+			controllers.AddServiceHandler(db)
+		case "4":
+			controllers.AddClientsToJsonXmlFiles(db)
+		case "5":
+			controllers.AddAccountsToJsonXmlFiles(db)
+		case "6":
+			controllers.AddATMsToJsonXmlFiles(db)
+		case "7":
+			controllers.AddClientsFromXmlJson(db)
+		case "8":
+			controllers.AddAccountsFromXmlJson(db)
+		case "9":
+			controllers.AddAtmFromXmlJson(db)
+		case "q":
+			os.Exit(0)
+		default:
+			fmt.Println("Введенно неверное значение, пробуйте еще раз\n")
+			continue
+		}
 	}
 }
 
 func test(db *sql.DB)  {
-	//client := models.Client{
-	//	ID:          0,
-	//	Name:        "1",
-	//	Surname:     "1",
-	//	NumberPhone: "2",
-	//	Login:       "2",
-	//	Password:    "2",
-	//	Locked:      false,
-	//}
 	file, err := ioutil.ReadFile("ATM.json")
 	if err != nil {
 		log.Fatal(err)
 	}
-	var backup []models.ATM
-	json.Unmarshal(file, &backup)
+	var backup cmodels.AtmList
+	err = json.Unmarshal(file, &backup)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("hello", err)
 		//re/turn err
 	}
-	for _, value := range backup{
-		fmt.Println(value)
+
+	for _, value := range backup.ATMs {
+		//String
+		split := strings.Split(value.Name, "\n")
+		value.Name = split[0]
+		fmt.Println(value.ID, value.Name, value.Locked)
 	}
 }

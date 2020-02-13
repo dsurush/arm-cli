@@ -87,7 +87,7 @@ func AddATMHandler(db *sql.DB) (err error){
 		activity = "активный"
 	}
 	fmt.Printf("Был добавлен АТМ по адрессу: %s\nТип активности: %s", newATM.Address, activity)
-	dbupdate.Test()
+	//dbupdate.Test()
 	return nil
 }
 
@@ -242,6 +242,146 @@ func AddATMsToJsonXmlFiles(db *sql.DB) (err error){
 	if err != nil {
 		log.Fatal(err)
 		return err
+	}
+	return nil
+}
+
+func AddAtmFromXmlJson(db *sql.DB) (err error) {
+	/////XML
+	file, err := ioutil.ReadFile("ATM.xml")
+	if err != nil {
+		log.Fatalf("Can't read file %e", err)
+		return err
+	}
+	var Atms cmodels.AtmList
+	err = xml.Unmarshal(file, &Atms)
+	if err != nil {
+		log.Fatal("Can't Unmarshal file", err)
+		return err
+	}
+	for _, Atm := range Atms.ATMs{
+		Address := Atm.Name
+		Locked := Atm.Locked
+		err = dbupdate.AddATM(Address, Locked, db)
+		if err != nil {
+			log.Printf("Проблема соединения с сервером %e", err)
+			return err
+		}
+	}
+
+	////// JSON
+	file, err = ioutil.ReadFile("ATM.json")
+	if err != nil {
+		log.Fatalf("Can't read file %e", err)
+		return err
+	}
+	err = json.Unmarshal(file, &Atms)
+	if err != nil {
+		log.Fatal("Can't Unmarshal file: ", err)
+		return err
+	}
+	for _, Atm := range Atms.ATMs{
+		Address := Atm.Name
+		Locked := Atm.Locked
+		err = dbupdate.AddATM(Address, Locked, db)
+		if err != nil {
+			log.Printf("Проблема соединения с сервером %e", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func AddClientsFromXmlJson(db *sql.DB) (err error){
+	file, err := ioutil.ReadFile("clients.xml")
+	var clients cmodels.ClientList
+	err = xml.Unmarshal(file, &clients)
+	if err != nil {
+		log.Fatalf("Всё очень плохо, не получилось анмаршилить из клиент ксмл", err)
+		return err
+	}
+
+	for _, user := range clients.Clients{
+		err = dbupdate.AddClient(user.Name, user.Surname, user.Login, user.Password, user.NumberPhone, db)
+		if err != nil {
+			log.Fatalf("Ne tut to bilo delo")
+			return err
+		}
+	}
+	////JSON
+	file, err = ioutil.ReadFile("clients.json")
+	if err != nil {
+		log.Fatalf("Can't read file %e", err)
+		return err
+	}
+	var clientList cmodels.ClientList
+	err = json.Unmarshal(file, &clientList)
+	if err != nil {
+		log.Fatal("Can't Unmarshal file: ", err)
+		return err
+	}
+	for _, user := range clientList.Clients{
+		fmt.Println(user.Name, user.Surname, user.Login, user.Password, user.NumberPhone)
+		err = dbupdate.AddClient(user.Name, user.Surname, user.Login, user.Password, user.NumberPhone, db)
+		if err != nil {
+			log.Fatalf("Ne tut to bilo delo")
+			return err
+		}
+	}
+	return nil
+}
+
+func AddAccountsFromXmlJson(db *sql.DB) (err error) {
+	file, err := ioutil.ReadFile("account.xml")
+	if err != nil {
+		log.Fatalf("Wring BLA %s", err)
+		return err
+	}
+	var AccountList cmodels.AccountList
+	err = xml.Unmarshal(file, &AccountList)
+	if err != nil {
+		log.Fatalf("Owibka BLA : %s", err)
+		return err
+	}
+
+	for _, Account := range AccountList.AccountWithUserName{
+		fmt.Println(Account.Client.Name, Account.Client.Surname, Account.Client.Login, Account.Client.Password, Account.Client.NumberPhone)
+		err = dbupdate.AddClient(Account.Client.Name, Account.Client.Surname, Account.Client.Login, Account.Client.Password, Account.Client.NumberPhone, db)
+		if err != nil {
+			log.Fatalf("Ne poluchilos Add Client %s", err)
+			return err
+		}
+		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Locked, db)
+		if err != nil {
+			log.Fatalf("Ne poluchilos Add Account %s", err)
+			return err
+		}
+	}
+	///JSON
+	file, err = ioutil.ReadFile("account.json")
+	if err != nil {
+		log.Fatalf("Wring BLA %s", err)
+		return err
+	}
+//	var AccountList cmodels.AccountList
+	err = json.Unmarshal(file, &AccountList)
+	if err != nil {
+		log.Fatalf("Owibka BLA : %s", err)
+		return err
+	}
+
+	for _, Account := range AccountList.AccountWithUserName{
+		fmt.Println(Account.Client.Name, Account.Client.Surname, Account.Client.Login, Account.Client.Password, Account.Client.NumberPhone)
+		err = dbupdate.AddClient(Account.Client.Name, Account.Client.Surname, Account.Client.Login, Account.Client.Password, Account.Client.NumberPhone, db)
+		if err != nil {
+			log.Fatalf("Ne poluchilos Add Client %s", err)
+			return err
+		}
+		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Locked, db)
+		if err != nil {
+			log.Fatalf("Ne poluchilos Add Account %s", err)
+			return err
+		}
 	}
 	return nil
 }
