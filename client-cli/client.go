@@ -28,14 +28,12 @@ func mainAppFunction(db *sql.DB)  {
 		fmt.Scan(&cmd)
 		switch cmd {
 		case "1":
-			err := controllers.Authorize(db)
+			id, err := controllers.Authorize(db)
 			if err != nil {
 				fmt.Println("Попробуйте еще раз")
 				continue
 			} else {
-				//TODO:////
-				fmt.Println("НУЖНО ПИСАТЬ ЧТО ПОСЛЕ АВТОРИЗАЦИЯ")
-				controllers.AuthorizedOperations(db)
+				controllers.AuthorizedOperations(id, db)
 			}
 		case "3":
 			err := controllers.GetATMsForClient(db)
