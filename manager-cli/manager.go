@@ -58,6 +58,8 @@ func mainAppFunction(db *sql.DB) {
 			controllers.AddAccountsFromXmlJson(db)
 		case "9":
 			controllers.AddAtmFromXmlJson(db)
+		case "10":
+			controllers.AddATMHandler(db)
 		case "q":
 			os.Exit(0)
 		default:

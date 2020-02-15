@@ -105,6 +105,14 @@ func AddAccountHandler(db *sql.DB) (err error){
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("Введите количество денег: ")
+	var balance int64
+	_, err = fmt.Scan(&balance)
+	if err != nil {
+		return err
+	}
+
 	fmt.Println("Введите 1 если хотите разблокировать сейчас же счет, иначе 0:")
 	locked := false
 	var typeOfLock int
@@ -115,7 +123,7 @@ func AddAccountHandler(db *sql.DB) (err error){
 	if typeOfLock == 1{
 		locked = true
 	}
-	err = dbupdate.AddAccount(clientID, paymentSystem, locked, db)
+	err = dbupdate.AddAccount(clientID, paymentSystem, balance, locked, db)
 	if err != nil {
 		fmt.Errorf("Ошибка при добавлении, %e", err)
 	}
@@ -351,7 +359,7 @@ func AddAccountsFromXmlJson(db *sql.DB) (err error) {
 			log.Fatalf("Ne poluchilos Add Client %s", err)
 			return err
 		}
-		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Locked, db)
+		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Balance , Account.Account.Locked, db)
 		if err != nil {
 			log.Fatalf("Ne poluchilos Add Account %s", err)
 			return err
@@ -377,7 +385,8 @@ func AddAccountsFromXmlJson(db *sql.DB) (err error) {
 			log.Fatalf("Ne poluchilos Add Client %s", err)
 			return err
 		}
-		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Locked, db)
+		err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Balance , Account.Account.Locked, db)
+		//err = dbupdate.AddAccount(Account.Account.UserId, Account.Account.Name, Account.Account.Locked, db)
 		if err != nil {
 			log.Fatalf("Ne poluchilos Add Account %s", err)
 			return err
