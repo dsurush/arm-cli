@@ -46,7 +46,7 @@ func GetATMsForClient(db *sql.DB) (err error){
 	}
 	return nil
 }
-
+//go install ./...
 func SearchAccountByIdHandler(id int64, db *sql.DB) (accounts map[int64]int64, err error){
 	list, err := dbupdate.SearchAccountById(id, db)
 	accounts = map[int64]int64{}
@@ -63,20 +63,7 @@ func SearchAccountByIdHandler(id int64, db *sql.DB) (accounts map[int64]int64, e
 	}
 	return accounts, nil
 }
-/*
-func SearchAccountByIdHandler(id int64, db *sql.DB) (err error){
-	list, err := dbupdate.SearchAccountById(id, db)
-	if err != nil {
-		fmt.Errorf("cant : %e", err)
-		return err
-	}
-	fmt.Println("Список ваших счетов:")
-	for index, account := range list{
-		fmt.Println(index + 1, ".", account.Name, account.AccountNumber, account.Locked)
-	}
-	return nil
-}
-*/
+
 func AuthorizedOperations(id int64, db *sql.DB){
 	var cmd string
 	for {
@@ -86,36 +73,86 @@ func AuthorizedOperations(id int64, db *sql.DB){
 			case "1":
 				SearchAccountByIdHandler(id, db)
 			case "2":
-				//TODO: перевод денег
-			case "3":
+				AccountNumber, err := ChooseAccount(id, db)
+				fmt.Println("Введите номер счета")
+				var newAccountNumber int64
+				fmt.Scan(&newAccountNumber)
+				fmt.Println("Введите сумму перевода")
+				var amount int64
+				fmt.Scan(&amount)
+				err = TransferToAccount(AccountNumber, newAccountNumber, amount, db)
+				if err != nil {
+					fmt.Println("Невозможно перевести деньги на этот счет")
+				}
+		case "3":
 				err := PayServiceHandler(id, db)
 				if err != nil {
 					log.Fatal("Uliya")
 				}
-				//TODO: Оплачивать услугу
 			case "q":
 				return
 		}
 	}
 }
-
-
-func PayServiceHandler(id int64, db *sql.DB) (err error){
-	//TODO: Вывести список счетов, где можно выбрать из списка счетов АккаунтНамбер
-	fmt.Println("Выберите счет:")
-	accounts, err := SearchAccountByIdHandler(id, db)
+////////////////////////
+func TransferToAccount(AccountNumber, NewAccountNumber, Amount int64, db *sql.DB) (err error){
+	tx, err := db.Begin()
 	if err != nil {
 		return err
 	}
-	fmt.Println(accounts)
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+	_, err = tx.Exec(`UPDATE accounts set balance = balance - ? where accountNumber = ?`, Amount, AccountNumber)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(`UPDATE accounts set balance = balance + ? where accountNumber = ?`, Amount, NewAccountNumber)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+///////////////////////
+func ChooseAccount(id int64, db *sql.DB) (AccountNumber int64, err error){
+	fmt.Println("Выберите счет:")
+	accounts, err := SearchAccountByIdHandler(id, db)
+	if err != nil {
+		return -1, err
+	}
+	//	fmt.Println(accounts)
 
 	for {
 		var cmd int64
 		fmt.Scan(&cmd)
 		switch (int64(len(accounts)) >= cmd && cmd > 0 ) {
 		case true:
-			//TODO Выберите продукт
-			fmt.Println(accounts[cmd])
+			return accounts[cmd], nil
+		case false:
+			fmt.Println("Введите заново в пределах количество ваших счетов")
+		}
+	}
+	return -1, nil
+}
+///////////////////////
+
+func PayServiceHandler(id int64, db *sql.DB) (err error){
+	fmt.Println("Выберите счет:")
+	accounts, err := SearchAccountByIdHandler(id, db)
+	if err != nil {
+		return err
+	}
+
+	for {
+		var cmd int64
+		fmt.Scan(&cmd)
+		switch (int64(len(accounts)) >= cmd && cmd > 0 ) {
+		case true:
 			ChooseToService(accounts[cmd], db)
 			return nil
 		case false:
@@ -137,9 +174,7 @@ func GetAllServicesHandler(db *sql.DB) (err error){
 	}
 	return nil
 }
-type NewErr struct {
-	err error
-}
+
 func ChooseToService(AccountNumber int64, db *sql.DB) (err error){
 	fmt.Println("Выберите услугу: ")
 	err = GetAllServicesHandler(db)
@@ -159,7 +194,6 @@ func ChooseToService(AccountNumber int64, db *sql.DB) (err error){
 			if err != nil {
 				fmt.Println("Перевод невозможен")
 			}
-			//TODO Tranz (accountNumber --> cmd (service ID)
 		}
 		return nil
 	}
